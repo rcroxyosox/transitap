@@ -1,0 +1,52 @@
+@font-face {
+font-family: 'RavePartyThinRegular';
+src: url('raveparty_thin-webfont.eot');
+src: url('raveparty_thin-webfont.eot?#iefix') format('embedded-opentype'),
+ url('raveparty_thin-webfont.woff') format('woff'),
+ url('raveparty_thin-webfont.ttf') format('truetype'),
+ url('raveparty_thin-webfont.svg#RavePartyThinRegular') format('svg');
+font-weight: normal;
+font-style: normal;
+}
+
+html { margin: 0 auto; height: 100% }
+body { 
+	height: 100%; 
+	margin: 0; 
+	padding: 0; 
+	font-family: Helvetica, Arial, sans-serif;
+}
+#map_canvas { height: 100% }
+#wrapper.iphone3{
+	background: url(../../images/iphone3.jpg) no-repeat left center;
+	width: 100%;
+	min-height: 874px;
+	position: relative;
+	top: -40px;
+	left: -40px;
+}
+#screen{
+	background: #ef1018;
+	position: absolute;
+	overflow: hidden;
+	color: white;
+}
+.iphone3 #screen{
+	width: 320px;
+	height: 480px;
+	left: 150px;
+	top: 203px;
+}
+#topbuttonsblock{
+	background: #2d2929;
+	height: 80%;
+	width: 100%;
+	position: absolute;
+	top: -80%;
+}
+#timer{
+	font-weight: bold;
+	font-size: 60px;
+	letter-spacing: -1px;
+	/*text-shadow: 2px 2px 2px #df1017;*/
+}

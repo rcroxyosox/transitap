@@ -1,4 +1,5 @@
-<?
+<?php
+
   /** A PHP class to access MySQL database with convenient methods
     * in an object oriented way, and with a powerful debug system.\n
     * Licence:  LGPL \n
@@ -26,7 +27,7 @@
       */
 		
 		var $local_cred = array(
-		'base' => 'riot',
+		'base' => 'transitdata',
 		'server' => 'localhost',
 		'user' => 'root',
 		'pass' => 'root'
@@ -39,23 +40,9 @@
 		'pass' => 'Design126!'
 		);		
 
-
-//******************************************************************//
-	//******************************************************************//
-	//******************************************************************//
-	
-					 // Enter DB login info below //
 	
 
-	
-
-	function DB()
-	
-	//******************************************************************//
-	//******************************************************************//
-	//******************************************************************//
-	
-    {
+	function DB(){
 			
 			$logincred = ($_SERVER['REMOTE_ADDR'] == '::1' || 
 								 	  $_SERVER['REMOTE_ADDR'] == '127.0.0.1')
@@ -332,4 +319,5 @@
 		return mysql_real_escape_string($str);
     }
   } // class DB
+	
 ?>
