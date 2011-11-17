@@ -1,5 +1,5 @@
 <?php require_once('_lib/php/static_functions.php');
-echo 'b';
+echo 'cocks';
  ?>
 <!DOCTYPE html>
 <html>
