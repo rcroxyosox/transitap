@@ -1,5 +1,5 @@
 <?php require_once('_lib/php/static_functions.php');
-echo 'balls';
+echo 'balls from testb-l';
  ?>
 <!DOCTYPE html>
 <html>
