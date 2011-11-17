@@ -1,3 +1,12 @@
+<?php 
+$debbug = (isset($_POST['debug']))?$_POST['debug']:0;
+if($debbug){ ?>
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+ret = 
+<?php } ?>
 <?php
 require_once('db.class.php/db.class.php');
 $DB = new db();
@@ -12,3 +21,12 @@ $ret .= implode(',', $retArr);
 $ret .= ']}'."\n";
 echo $ret;
 ?>
+<?php if($debbug){ ?>
+console.log(ret.stops);
+</script>
+</head>
+<body>
+</body>
+</html>
+<?php } ?>
+

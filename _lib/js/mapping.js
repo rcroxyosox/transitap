@@ -3,43 +3,7 @@ $(document).ready(function(){
 
 		/************util**************/
 
-		function sortNumber(a,b){return a - b;}	
-		distanceSort = function(options){
-			stopData = options.stopData;
-			field = options.field; 
-			/* console.log(stopData); */
-			stopsDistCalc = [];
-			copyStopsArr = {"stops":[]}; 
-			for(i=0;i<stopData.stops.length;i++){
-				if(options.sortNumber != "undefined"){stopsDistCalc[i]=parseFloat(stopData.stops[i][field]);}
-				else{stopsDistCalc[i]=stopData.stops[i][field];}
-			}
-			
-			if(options.sortNumber != "undefined"){stopsDistCalc.sort(sortNumber);}
-			else{ stopsDistCalc.sort(); }
-			
-			var orgKey;
-		  var dist;
-			
-			for(j=0;j<stopsDistCalc.length; j++){
-				for(k=0;k<stopData.stops.length;k++){
-					if(stopData.stops[k][field] == stopsDistCalc[j]){
-						orgKey = k;
-						dist = stopsDistCalc[j];						
-					}
-				}
-				
-				copyStopsArr.stops[j] = new Object();
-				c = 1;
-				for(var key in stopData.stops[orgKey]){
-					comma = (c == Object.keys(stopData.stops[orgKey]).length)? "" : ",";
-					copyStopsArr.stops[j][key] = stopData.stops[orgKey][key];
-					c++;
-				}
-			}
-			/* console.log(copyStopsArr); */
-			return copyStopsArr;
-		}
+		sortNumber = function(a,b){return a - b;}	
 		
 		/************util**************/
 		
@@ -68,14 +32,17 @@ $(document).ready(function(){
 			/* play with the markers */
 			$('#gen').toggle(
 				function(){
-					markStops({lat:lat,lng:lng});
+					markStops({lat:lat,lng:lng});	
 				},
 				function(){
 					deleteOverlays();
 			});
 			
+			
+			
 		}
 		
+		/* add markers onto the map */
 		function addMarker(options){
 			
 			var marker = new google.maps.Marker({
@@ -121,11 +88,48 @@ $(document).ready(function(){
 			}
 		}
 		
-		/* Get the ajax */
-		markStops = function(options){
+		/* Get the stops and sort them by distance */
+		distanceSort = function(options){
+			stopData = options.stopData;
+			field = options.field; 
+			/* console.log(stopData); */
+			stopsDistCalc = [];
+			copyStopsArr = {"stops":[]}; 
+			for(i=0;i<stopData.stops.length;i++){
+				if(options.sortNumber != "undefined"){stopsDistCalc[i]=parseFloat(stopData.stops[i][field]);}
+				else{stopsDistCalc[i]=stopData.stops[i][field];}
+			}
+			
+			if(options.sortNumber != "undefined"){stopsDistCalc.sort(sortNumber);}
+			else{ stopsDistCalc.sort(); }
+			
+			var orgKey;
+		  var dist;
+			
+			for(j=0;j<stopsDistCalc.length; j++){
+				for(k=0;k<stopData.stops.length;k++){
+					if(stopData.stops[k][field] == stopsDistCalc[j]){
+						orgKey = k;
+						dist = stopsDistCalc[j];						
+					}
+				}
+				
+				copyStopsArr.stops[j] = new Object();
+				c = 1;
+				for(var key in stopData.stops[orgKey]){
+					comma = (c == Object.keys(stopData.stops[orgKey]).length)? "" : ",";
+					copyStopsArr.stops[j][key] = stopData.stops[orgKey][key];
+					c++;
+				}
+			}
+			/* console.log(copyStopsArr); */
+			return copyStopsArr;
+		}		
+		
+		/* mark the stops */
+		getSortedStops = function(options){
 			
 			curPos = new google.maps.LatLng(options.lat, options.lng);
-			//console.log(options.lat+":"+options.lng);
 			
 			$.ajax({
 				type: "POST",
@@ -133,30 +137,38 @@ $(document).ready(function(){
 				data: {lat:options.lat,lng:options.lng},
 				url: "_lib/php/ajax_get_stops.php",
 				success: function(stopData){
-					
-					stopsObj = stopData;
-					//console.log(options.lat+":"+options.lng);
-					
-					sl = stopsObj.stops.length;
+	
+						sl = stopData.stops.length;
+						
+						for(i=0;i<sl;i++){
+							lat = stopData.stops[i].stoplat;
+							lng = stopData.stops[i].stoplng;
+							var stopPos = new google.maps.LatLng(lat, lng);	
+							distance = google.maps.geometry.spherical.computeDistanceBetween(stopPos, curPos);
+							stopData.stops[i]["stopdist"] = distance;
+						}
+						
+						sortedByDist = distanceSort({stopData:stopData, field:"stopdist", sortNumber:true});//resort by closest
+	
+				}
+			});			
+		}
+	
+		
+	
+		/* mark the stops based on the stops obj*/
+	  markStops = function(options){
+			$.getJSON("_lib/php/ajax_get_stops.php", function(stopsObj) {
+					//console.log(stopsObj);
+					sl = stopsObj.stops.length; 
 					for(i=0;i<sl;i++){
 						lat = stopsObj.stops[i].stoplat;
 						lng = stopsObj.stops[i].stoplng;	
 						infoContent = stopsObj.stops[i].stopid;
-						var stopPos = new google.maps.LatLng(lat, lng);	
-						distance = google.maps.geometry.spherical.computeDistanceBetween(stopPos, curPos);
-						stopsObj.stops[i]["stopdist"] = distance;
-						addMarker({location:stopPos,infoContent:infoContent});
+						markerPos = latlng = new google.maps.LatLng(lat, lng);
+						addMarker({location:markerPos,infoContent:infoContent});
 					}
-					
-					resortedStopData = distanceSort({stopData:stopsObj, field:"stopdist", sortNumber:true});//resort by closest
-					seletedTrip['startStation'] = resortedStopData.stops[0].stopid;// grab the  nearest
-					console.log(seletedTrip.startStation); 
-					
-					//console.log(stopsObj);
-					console.log(resortedStopData);
-					//console.log(curPos);
-				}
-			});
+    	})
 		}
 	
 		/* Play with the show nearest */

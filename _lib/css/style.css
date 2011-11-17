@@ -50,3 +50,9 @@ body {
 	letter-spacing: -1px;
 	/*text-shadow: 2px 2px 2px #df1017;*/
 }
+#smtime{
+	font-size: 11px;
+}
+#formblock label{
+	display: block;
+}
