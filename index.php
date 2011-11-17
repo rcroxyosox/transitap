@@ -1,5 +1,5 @@
 <?php require_once('_lib/php/static_functions.php');
-echo 'a';
+echo 'b';
  ?>
 <!DOCTYPE html>
 <html>
