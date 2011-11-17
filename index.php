@@ -117,4 +117,5 @@ $(document).ready(function(){
     </div>
   </div>
 </body>
+<!-- here is on master from the remote -->
 </html>
