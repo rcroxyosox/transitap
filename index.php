@@ -1,4 +1,6 @@
-<?php require_once('_lib/php/static_functions.php'); ?>
+<?php require_once('_lib/php/static_functions.php');
+echo 'a';
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
