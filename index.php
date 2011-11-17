@@ -116,6 +116,5 @@ $(document).ready(function(){
       
     </div>
   </div>
-<!-- here is the line added -->
 </body>
 </html>
